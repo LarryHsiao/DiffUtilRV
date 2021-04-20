@@ -1,10 +1,14 @@
 package com.example.diffutilrv;
 
-public class Employee {
+import java.util.Objects;
 
-    public int id;
-    public String name;
-    public String role;
+/**
+ * Employee object presents a employee.
+ */
+public class Employee {
+    public final int id;
+    public final String name;
+    public final String role;
 
     public Employee(final int id, final String name, final String role) {
         this.id = id;
@@ -26,15 +30,20 @@ public class Employee {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
-
-        Employee employee = (Employee) obj;
-
-        if (id != employee.id) return false;
-        if (!role.equalsIgnoreCase(employee.role)) return false;
-        return name != null ? name.equals(employee.name) : employee.name == null;
-
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        final Employee employee = (Employee) obj;
+        if (id != employee.id) {
+            return false;
+        }
+        if (!role.equalsIgnoreCase(employee.role)) {
+            return false;
+        }
+        return Objects.equals(name, employee.name);
     }
 
     @Override

@@ -8,21 +8,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+/**
+ * Entry point of this app.
+ */
 public class MainActivity extends AppCompatActivity {
-
-    private RecyclerView mRecyclerView;
-    private EmployeeRecyclerViewAdapter mRecyclerViewAdapter;
+    private final EmployeeAdapter mAdapter = new EmployeeAdapter(); // Immutable adapter, why: One list, one adapter. Make sense?
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        mRecyclerViewAdapter = new EmployeeRecyclerViewAdapter(
-                DummyEmployeeDataUtils.getEmployeeListSortedByRole());
-        mRecyclerView = findViewById(R.id.recycler_view);
+        final RecyclerView mRecyclerView = findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mRecyclerView.setAdapter(mRecyclerViewAdapter);
+        mRecyclerView.setAdapter(mAdapter);
+        mAdapter.loadList(DummyEmployeeDataUtils.getEmployeeListSortedByRole());
     }
 
     @Override
@@ -33,17 +32,13 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.sort_by_name:
-                mRecyclerViewAdapter.updateEmployeeListItems(
-                        DummyEmployeeDataUtils.getEmployeeListSortedByName());
-                return true;
-            case R.id.sort_by_role:
-                mRecyclerViewAdapter.updateEmployeeListItems(
-                        DummyEmployeeDataUtils.getEmployeeListSortedByRole());
-                return true;
+        if (item.getItemId() == R.id.sort_by_name) {
+            mAdapter.loadList(
+                    DummyEmployeeDataUtils.getEmployeeListSortedByName());
+        } else if (item.getItemId() == R.id.sort_by_role) {
+            mAdapter.loadList(
+                    DummyEmployeeDataUtils.getEmployeeListSortedByRole());
         }
-
         return super.onOptionsItemSelected(item);
     }
 }

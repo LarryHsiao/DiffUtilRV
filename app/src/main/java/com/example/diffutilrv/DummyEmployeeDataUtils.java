@@ -5,6 +5,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+/**
+ * Mock data.
+ */
 public class DummyEmployeeDataUtils {
     public static List<Employee> getEmployeeListSortedByName() {
         final List<Employee> employeeList = getEmployeeList();
