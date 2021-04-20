@@ -15,8 +15,11 @@ import java.util.List;
 /**
  * Adapter for displaying a employee list.
  * <p>
- * Thought: A adapter's responsibility should just define 'How a item display'.
- * So any manipulation of data should not shows up at here. (No if-else expression.)
+ * Thought:
+ * <p>
+ * - Define 'How a item display'.
+ * <p>
+ * - So any manipulation of data should not shows up at here. (No if-else expression.)
  */
 public class EmployeeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     /**
@@ -34,15 +37,18 @@ public class EmployeeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
          * which I think is redundant, too.
          */
         return new RecyclerView.ViewHolder(
-                LayoutInflater.from(
-                        parent.getContext()
-                ).inflate(R.layout.list_item, parent, false)
-        ) {};
+                LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.list_item, parent, false)
+        ) {
+        };
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         final Employee employee = employees.get(position);
+        /**
+         * Straight forward code for setting up View, we can user some extension here to simplify the code in Kotlin.
+         */
         ((TextView) holder.itemView.findViewById(R.id.employee_name)).setText(employee.getName());
         ((TextView) holder.itemView.findViewById(R.id.employee_role)).setText(employee.getRole());
     }

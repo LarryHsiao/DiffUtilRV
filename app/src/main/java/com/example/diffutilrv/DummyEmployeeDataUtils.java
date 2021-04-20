@@ -11,26 +11,13 @@ import java.util.List;
 public class DummyEmployeeDataUtils {
     public static List<Employee> getEmployeeListSortedByName() {
         final List<Employee> employeeList = getEmployeeList();
-
-        Collections.sort(employeeList, new Comparator<Employee>() {
-            @Override
-            public int compare(Employee a1, Employee a2) {
-                return a1.getName().compareTo(a2.getName());
-            }
-        });
-
+        employeeList.sort(Comparator.comparing(Employee::getName));
         return employeeList;
     }
 
     public static List<Employee> getEmployeeListSortedByRole() {
         final List<Employee> employeeList = getEmployeeList();
-
-        Collections.sort(employeeList, new Comparator<Employee>() {
-            @Override
-            public int compare(Employee a1, Employee a2) {
-                return a2.getRole().compareTo(a1.getRole());
-            }
-        });
+        employeeList.sort((a1, a2) -> a2.getRole().compareTo(a1.getRole()));
         return employeeList;
     }
 

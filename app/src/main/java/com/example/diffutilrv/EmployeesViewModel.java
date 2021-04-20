@@ -10,9 +10,18 @@ import java.util.concurrent.CompletableFuture;
 
 /**
  * ViewModel for represent a employee list.
+ * <p>
+ * ViewModel:
+ * <p>
+ * - Manipulated by user actions.
+ * <p>
+ * - Defines 'How the data build up'.
+ * <p>
+ * - Publish data to View by using LiveData.
  */
 public class EmployeesViewModel extends ViewModel {
     private final List<Employee> employees = new ArrayList<>(); // Immutable list reference.
+    private SortingRule sortingRule = SortingRule.NAME;
     private final MutableLiveData<List<Employee>> employeeLiveData = new MutableLiveData<>();
 
     /**
@@ -26,26 +35,38 @@ public class EmployeesViewModel extends ViewModel {
      * For fetching data by sorting current rule.
      */
     public void fetch() {
-        CompletableFuture.runAsync(new Runnable() {
-            @Override
-            public void run() {
-                employees.clear();
-                employees.addAll(fetchEmployees());
-                employeeLiveData.postValue(employees);
+        CompletableFuture.runAsync(this::loadEmployees);
+    }
+
+    public void sortByName() {
+        updateSortingRule(SortingRule.NAME);
+    }
+
+    public void sortByRole() {
+        updateSortingRule(SortingRule.ROLE);
+    }
+
+    private void updateSortingRule(SortingRule rule) {
+        sortingRule = rule;
+        loadEmployees();
+    }
+
+    private void loadEmployees() {
+        CompletableFuture.runAsync(() -> {
+            switch (sortingRule) {
+                case NAME:
+                    loadEmployees(DummyEmployeeDataUtils.getEmployeeListSortedByName());
+                    break;
+                case ROLE:
+                    loadEmployees(DummyEmployeeDataUtils.getEmployeeListSortedByRole());
+                    break;
             }
         });
     }
 
-    public void sortByName(){
-        // TODO
-    }
-
-    public void sortByRole(){
-        // TODO
-    }
-
-    private List<Employee> fetchEmployees(){
-        // TODO rule
-        return DummyEmployeeDataUtils.getEmployeeListSortedByName();
+    private void loadEmployees(List<Employee> newEmployees) {
+        employees.clear();
+        employees.addAll(newEmployees);
+        employeeLiveData.postValue(employees);
     }
 }

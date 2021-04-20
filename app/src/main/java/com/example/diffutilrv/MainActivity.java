@@ -14,6 +14,12 @@ import java.util.List;
 
 /**
  * Entry point of this app.
+ * <p>
+ * View:
+ * <p>
+ * - Pop all employee data to adapter.
+ * <p>
+ * - Redirect the user action to ViewModel
  */
 public class MainActivity extends AppCompatActivity {
     // Immutable adapter, why: One list, one adapter. Make sense?
@@ -29,12 +35,7 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(mAdapter);
         mAdapter.loadList(DummyEmployeeDataUtils.getEmployeeListSortedByRole());
         viewModel = ViewModelProviders.of(this).get(EmployeesViewModel.class);
-        viewModel.employee().observe(this, new Observer<List<Employee>>() {
-            @Override
-            public void onChanged(List<Employee> employees) {
-                mAdapter.loadList(employees);
-            }
-        });
+        viewModel.employee().observe(this, mAdapter::loadList);
         viewModel.fetch();
     }
 

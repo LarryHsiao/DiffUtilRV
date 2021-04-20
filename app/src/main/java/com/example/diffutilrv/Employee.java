@@ -6,6 +6,7 @@ import java.util.Objects;
  * Employee object presents a employee.
  */
 public class Employee {
+    // Immutable fields for not change it in the future.
     public final int id;
     public final String name;
     public final String role;
