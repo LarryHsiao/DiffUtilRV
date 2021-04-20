@@ -5,14 +5,20 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.List;
 
 /**
  * Entry point of this app.
  */
 public class MainActivity extends AppCompatActivity {
-    private final EmployeeAdapter mAdapter = new EmployeeAdapter(); // Immutable adapter, why: One list, one adapter. Make sense?
+    // Immutable adapter, why: One list, one adapter. Make sense?
+    private final EmployeeAdapter mAdapter = new EmployeeAdapter();
+    private EmployeesViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +28,14 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(mAdapter);
         mAdapter.loadList(DummyEmployeeDataUtils.getEmployeeListSortedByRole());
+        viewModel = ViewModelProviders.of(this).get(EmployeesViewModel.class);
+        viewModel.employee().observe(this, new Observer<List<Employee>>() {
+            @Override
+            public void onChanged(List<Employee> employees) {
+                mAdapter.loadList(employees);
+            }
+        });
+        viewModel.fetch();
     }
 
     @Override
@@ -33,11 +47,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.sort_by_name) {
-            mAdapter.loadList(
-                    DummyEmployeeDataUtils.getEmployeeListSortedByName());
+            viewModel.sortByName();
         } else if (item.getItemId() == R.id.sort_by_role) {
-            mAdapter.loadList(
-                    DummyEmployeeDataUtils.getEmployeeListSortedByRole());
+            viewModel.sortByRole();
         }
         return super.onOptionsItemSelected(item);
     }

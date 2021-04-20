@@ -36,7 +36,6 @@ public class DummyEmployeeDataUtils {
 
     private static List<Employee> getEmployeeList() {
         final List<Employee> employees = new ArrayList<>();
-
         employees.add(new Employee(1, "Employee 1", "Developer"));
         employees.add(new Employee(2, "Employee 2", "Tester"));
         employees.add(new Employee(3, "Employee 3", "Support"));
